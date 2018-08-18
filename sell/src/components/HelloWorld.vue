@@ -80,17 +80,25 @@
         </a>
       </li>
     </ul>
+    <div>测试seller: {{name}}</div>
   </div>
 </template>
 
 <script>
+import {getSellers} from '@/api/api'
+
 export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      name: 'hello'
     }
+  },
+  mounted () {
+    getSellers().then(res => { console.log(res.data) })
   }
+
 }
 </script>
 
