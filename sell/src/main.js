@@ -6,12 +6,14 @@ import router from './router'
 
 import './mock/mock' // 引入mockjs
 
+import './common/stylus/index.styl' // 引入样式
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+	el: '#app',
+	router,
+	components: { App },
+	template: '<App/>'
 })

@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
@@ -86,22 +87,21 @@
 
 <script>
 import {getSellers} from '@/api/api'
-
+/* eslint-disable */
 export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App',
-      name: 'hello'
+	name: 'HelloWorld',
+	data () {
+		return {
+			msg: 'Welcome to Your Vue.js App',
+			name: 'hello'
     }
-  },
-  mounted () {
-    getSellers().then(res => { console.log(res.data) })
-  }
-
+	},
+	mounted () {
+		getSellers().then(res => { console.log(res.data) })
+	}
 }
 </script>
-
+/* eslint-disable */
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1, h2 {
