@@ -1,6 +1,7 @@
 <template>
-  <div>
-      评论详情
+  <div class="ratings">
+      <div class="ratings-content">
+	  </div>
   </div>
 </template>
 <script>
