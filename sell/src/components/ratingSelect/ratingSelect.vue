@@ -76,6 +76,7 @@ export default {
 @import '../../common/stylus/mixin.styl'
 
 .ratingSelect
+    text-align: left
     .ratingType
         padding: 18px 0
         margin: 0 18px
