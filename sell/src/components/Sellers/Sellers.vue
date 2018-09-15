@@ -1,5 +1,5 @@
 <template>
-	<div class="seller">
+	<div class="seller" ref="seller">
 		<div class="seller-content">
 			<div class="overview">
 				<h1 class="title">{{seller.name}}</h1>
@@ -35,13 +35,24 @@
 				<div class="content-wrapper border-1px">
 					<p class="content">{{seller.bulletin}}</p>
 				</div>
+				<ul v-if="seller.supports" class="supports">
+					<li v-for="(item,index) in seller.supports" :key="index" class="support-item border-1px">
+						<span class="icon" :class="classMap[item.type]"></span>
+						<span class="text">{{item.description}}</span>
+					</li>
+				</ul>
 			</div>
-			<ul v-if="seller.supports" class="supports">
-				<li v-for="(item,index) in seller.supports" :key="index" class="support-item">
-					<span class="icon" :class="classMap[item.type]"></span>
-					<span class="text">{{item.description}}</span>
-				</li>
-			</ul>
+			<Split></Split>
+			<div class="pics">
+				<h1 class="title">商家实景</h1>
+				<div class="pic-wrapper">
+					<ul class="pic-list">
+						<li class="pic-item"  v-for="(pic,index) in seller.pics" :key="index">
+							<img :src="pic" width="120" height="90">
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -49,6 +60,7 @@
 import {getSellers} from '@/api/api'
 import Star from '../Star/Star'
 import Split from '../split/split'
+import BScroll from 'better-scroll'
 export default {
 	props: {
 	},
@@ -65,7 +77,21 @@ export default {
 		this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 		getSellers().then(res => {
 			this.seller = res.data;
+			this.$nextTick(() => {
+				this._initScroll();
+			})
 		})
+	},
+	methods: {
+		_initScroll () {
+			if (!this.scroll) {
+				this.scroll = new BScroll(this.$refs.seller, {
+					click: true
+				});
+			} else {
+				this.scroll.refresh();
+			}
+		}
 	}
 }
 </script>
@@ -139,4 +165,51 @@ export default {
 				font-weight: 200
 				color: rgb(240, 20, 20)
 				margin: 0
+		.supports
+			.support-item
+				list-style: none
+				padding: 16px 12px;
+				border-1px(rgba(7, 17, 27, 0.1))
+				&:last-child
+					border-none()
+				.icon
+					display: inline-block
+					vertical-align: middle
+					width: 12px
+					height: 12px
+					margin-right: 6px
+					background-size: 12px 12px
+					background-repeat: no-repeat
+					&.decrease
+						bg-image('decrease_4')
+					&.discount
+						bg-image('discount_4')
+					&.guarantee
+						bg-image('guarantee_4')
+					&.invoice
+						bg-image('invoice_4')
+					&.special
+						bg-image('special_4')
+				.text
+					line-heigth: 16px
+					width: 56px
+					vertical-align: middle
+					font-size: 12px
+					font-weight: 200
+					color: rgb(7, 17, 27)
+	.pics
+		padding: 18px
+		ul
+			li
+				list-style: none
+				display: inline
+		.title
+			margin-bottom: 12px
+			line-height: 14px
+			font-size: 14px
+			color: rgb(7, 17, 27)
+			.pic-wrapper
+				width: 100%
+				overflow: hidden
+				white-space: nowrap
 </style>
