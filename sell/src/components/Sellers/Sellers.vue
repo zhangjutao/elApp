@@ -45,13 +45,20 @@
 			<Split></Split>
 			<div class="pics">
 				<h1 class="title">商家实景</h1>
-				<div class="pic-wrapper">
-					<ul class="pic-list">
+				<div class="pic-wrapper" ref="picwrapper">
+					<ul class="pic-list" ref="piclist">
 						<li class="pic-item"  v-for="(pic,index) in seller.pics" :key="index">
 							<img :src="pic" width="120" height="90">
 						</li>
 					</ul>
 				</div>
+			</div>
+			<Split></Split>
+			<div class="info">
+				<h1 class="title">商家信息</h1>
+				<ul>
+					<li class="info-item" v-for="(info,index) in seller.infos" :key="index">{{info}}</li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -79,6 +86,7 @@ export default {
 			this.seller = res.data;
 			this.$nextTick(() => {
 				this._initScroll();
+				this._initPics();
 			})
 		})
 	},
@@ -90,6 +98,22 @@ export default {
 				});
 			} else {
 				this.scroll.refresh();
+			}
+		},
+		_initPics () {
+			if (this.seller.pics) {
+				let picWidth = 120;
+				let margin = 6;
+				let width = (picWidth + margin) * this.seller.pics.length - margin;
+				this.$refs.piclist.style.width = width + 'px';
+				this.$nextTick(() => {
+					this.picScorll = new BScroll(this.$refs.picwrapper, {
+						scrollX: true,
+						eventPassthrough: 'vertical'
+					})
+				})
+			} else {
+				this.picScorll.refresh();
 			}
 		}
 	}
@@ -208,8 +232,34 @@ export default {
 			line-height: 14px
 			font-size: 14px
 			color: rgb(7, 17, 27)
-			.pic-wrapper
-				width: 100%
-				overflow: hidden
-				white-space: nowrap
+		.pic-wrapper
+			width: 100%
+			overflow: hidden
+			white-space: nowrap
+			.pic-list
+				font-size: 0
+				.pic-item
+					display: inline-block
+					margin-right: 6px
+					width: 120px
+					height: 90px
+					&.last-child
+						margin-right: 0
+	.info
+		padding: 18px 18px 0 18px
+		ul
+			li
+				list-style: none
+		.title
+			margin-bottom: 12px
+			line-height: 14px
+			font-size: 14px
+			color: #07111b
+		.info-item
+			padding: 16px 12px
+			border-right: 1px solid rgba(7, 17, 27, 0.1)
+			line-height: 16px
+			font-size: 12px
+			font-weight: 200
+			color: rgb(7, 17, 27)
 </style>
