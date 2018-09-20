@@ -72,8 +72,8 @@ import {getSellers} from '@/api/api'
 import Star from '../Star/Star'
 import Split from '../split/split'
 import BScroll from 'better-scroll'
-import {urlParse} from '@/common/js/util';
-import {saveToLocal, loadFromLocal} from '@/common/js/store'
+// import {urlParse} from '@/common/js/util';
+// import {saveToLocal, loadFromLocal} from '@/common/js/store'
 export default {
 	props: {
 	},
@@ -84,15 +84,9 @@ export default {
 	data () {
 		return {
 			seller: {
-				id: (() => {
-					let queryParam = urlParse();
-					console.log(queryParam);
-					return queryParam.id
-				})()
+				type: Object
 			},
-			favorite: (() => {
-				return loadFromLocal(this.seller.id, 'favorite', false);
-			})()
+			favorite: false
 		}
 	},
 	computed: {
@@ -138,7 +132,6 @@ export default {
 		},
 		toggleFavorite () {
 			this.favorite = !this.favorite;
-			saveToLocal(this.seller.id, 'favorite', this.favorite);
 		}
 	}
 }
