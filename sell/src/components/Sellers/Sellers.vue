@@ -28,6 +28,10 @@
 						</div>
 					</li>
 				</ul>
+				<div class="favorite">
+					<span class="icon-favorite" :class="{'active':favorite}" @click="toggleFavorite"></span>
+					<span class="text">{{favoriteText}}</span>
+				</div>
 			</div>
 			<Split></Split>
 			<div class="bulletin">
@@ -68,6 +72,8 @@ import {getSellers} from '@/api/api'
 import Star from '../Star/Star'
 import Split from '../split/split'
 import BScroll from 'better-scroll'
+import {urlParse} from '@/common/js/util';
+import {saveToLocal, loadFromLocal} from '@/common/js/store'
 export default {
 	props: {
 	},
@@ -77,7 +83,21 @@ export default {
 	},
 	data () {
 		return {
-			seller: {}
+			seller: {
+				id: (() => {
+					let queryParam = urlParse();
+					console.log(queryParam);
+					return queryParam.id
+				})()
+			},
+			favorite: (() => {
+				return loadFromLocal(this.seller.id, 'favorite', false);
+			})()
+		}
+	},
+	computed: {
+		favoriteText () {
+			return this.favorite ? '已收藏' : '收藏';
 		}
 	},
 	mounted () {
@@ -115,6 +135,10 @@ export default {
 			} else {
 				this.picScorll.refresh();
 			}
+		},
+		toggleFavorite () {
+			this.favorite = !this.favorite;
+			saveToLocal(this.seller.id, 'favorite', this.favorite);
 		}
 	}
 }
@@ -130,6 +154,7 @@ export default {
 	width: 100%
 	overflow: hidden
 	.overview
+		position:relative
 		padding: 18px
 		.title
 			line-height: 14px
@@ -173,6 +198,24 @@ export default {
 					color: rgb(7, 17, 27)
 					.stress
 						font-size: 24px
+		.favorite
+			position: absolute
+			width: 50px
+			right: 11px
+			top: 18px
+			text-align: center
+			.icon-favorite
+				margin-bottom: 4px
+				display: block
+				color: #d4d6d9
+				line-height: 24px
+				font-size: 24px
+				&.active
+					color: rgb(240, 20, 20)
+			.text
+				line-height: 10px
+				font-size: 10px
+				color: rgb(77, 85, 93)
 	.bulletin
 		padding: 18px 18px 0 18px
 		.title
@@ -254,10 +297,10 @@ export default {
 			margin-bottom: 12px
 			line-height: 14px
 			font-size: 14px
-			color: #07111b
+			color: rgb(7, 17, 27)
 		.info-item
 			padding: 16px 12px
-			border-right: 1px solid rgba(7, 17, 27, 0.1)
+			border-top: 1px solid rgba(7, 17, 27, 0.1)
 			line-height: 16px
 			font-size: 12px
 			font-weight: 200
